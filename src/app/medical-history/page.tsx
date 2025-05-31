@@ -10,10 +10,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Stethoscope, Pill, FlaskConical, FilePenLine, ShieldCheck, Download, Info } from "lucide-react";
-import React, { useMemo } from "react";
+import React, { useMemo, Suspense } from "react"; // Added Suspense
+import { useSearchParams } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
 import Image from "next/image";
-import { useSearchParams } from 'next/navigation';
 
 const recordTypeIcons: Record<MedicalRecord["type"], React.ElementType> = {
   Diagnóstico: Stethoscope,
@@ -22,56 +22,6 @@ const recordTypeIcons: Record<MedicalRecord["type"], React.ElementType> = {
   "Nota de Progreso": FilePenLine,
   Vacunación: ShieldCheck,
 };
-
-export default function MedicalHistoryPage() {
-  const searchParams = useSearchParams();
-  const initialTab = searchParams.get('tab') || 'all';
-
-  const recordTypes: MedicalRecord["type"][] = ["Diagnóstico", "Prescripción", "Resultado de Laboratorio", "Nota de Progreso", "Vacunación"];
-
-  const recordsByType = useMemo(() => {
-    const grouped: Record<string, MedicalRecord[]> = { all: [...mockMedicalHistory].sort((a,b) => parseISO(b.date).getTime() - parseISO(a.date).getTime()) };
-    recordTypes.forEach(type => {
-      grouped[type] = mockMedicalHistory.filter(record => record.type === type).sort((a,b) => parseISO(b.date).getTime() - parseISO(a.date).getTime());
-    });
-    // Remap prescriptions tab to 'Prescripción' for filtering
-    if (grouped['Prescripción']) {
-        grouped['prescriptions'] = grouped['Prescripción'];
-    }
-    return grouped;
-  }, []);
-  
-  const defaultTabValue = recordTypes.includes(initialTab as MedicalRecord["type"]) || initialTab === "all" || initialTab === "prescriptions" ? initialTab : "all";
-
-
-  return (
-    <MainLayout>
-      <PageHeader
-        title="My Medical History"
-        description={`View your health records, ${mockUser.nombre}.`}
-      />
-      <Tabs defaultValue={defaultTabValue} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-6 mb-6">
-          <TabsTrigger value="all">All ({recordsByType.all.length})</TabsTrigger>
-          {recordTypes.map(type => (
-            <TabsTrigger key={type} value={type === 'Prescripción' ? 'prescriptions' : type}>
-              {type} ({recordsByType[type]?.length || 0})
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        <TabsContent value="all">
-          <RecordList records={recordsByType.all} />
-        </TabsContent>
-        {recordTypes.map(type => (
-          <TabsContent key={type} value={type === 'Prescripción' ? 'prescriptions' : type}>
-            <RecordList records={recordsByType[type] || []} />
-          </TabsContent>
-        ))}
-      </Tabs>
-    </MainLayout>
-  );
-}
 
 interface RecordListProps {
   records: MedicalRecord[];
@@ -146,5 +96,63 @@ function MedicalRecordCard({ record }: MedicalRecordCardProps) {
         </CardFooter>
       )}
     </Card>
+  );
+}
+
+function MedicalHistoryContent() {
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get('tab') || 'all';
+
+  const recordTypes: MedicalRecord["type"][] = ["Diagnóstico", "Prescripción", "Resultado de Laboratorio", "Nota de Progreso", "Vacunación"];
+
+  const recordsByType = useMemo(() => {
+    const grouped: Record<string, MedicalRecord[]> = { all: [...mockMedicalHistory].sort((a,b) => parseISO(b.date).getTime() - parseISO(a.date).getTime()) };
+    recordTypes.forEach(type => {
+      grouped[type] = mockMedicalHistory.filter(record => record.type === type).sort((a,b) => parseISO(b.date).getTime() - parseISO(a.date).getTime());
+    });
+    // Remap prescriptions tab to 'Prescripción' for filtering
+    if (grouped['Prescripción']) {
+        grouped['prescriptions'] = grouped['Prescripción'];
+    }
+    return grouped;
+  }, []);
+  
+  const defaultTabValue = recordTypes.includes(initialTab as MedicalRecord["type"]) || initialTab === "all" || initialTab === "prescriptions" ? initialTab : "all";
+
+  return (
+    <Tabs defaultValue={defaultTabValue} className="w-full">
+      <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-6 mb-6">
+        <TabsTrigger value="all">All ({recordsByType.all.length})</TabsTrigger>
+        {recordTypes.map(type => (
+          <TabsTrigger key={type} value={type === 'Prescripción' ? 'prescriptions' : type}>
+            {type} ({recordsByType[type]?.length || 0})
+          </TabsTrigger>
+        ))}
+      </TabsList>
+
+      <TabsContent value="all">
+        <RecordList records={recordsByType.all} />
+      </TabsContent>
+      {recordTypes.map(type => (
+        <TabsContent key={type} value={type === 'Prescripción' ? 'prescriptions' : type}>
+          <RecordList records={recordsByType[type] || []} />
+        </TabsContent>
+      ))}
+    </Tabs>
+  );
+}
+
+
+export default function MedicalHistoryPage() {
+  return (
+    <MainLayout>
+      <PageHeader
+        title="My Medical History"
+        description={`View your health records, ${mockUser.nombre}.`}
+      />
+      <Suspense fallback={<div className="text-center p-8 text-muted-foreground">Loading medical records...</div>}>
+        <MedicalHistoryContent />
+      </Suspense>
+    </MainLayout>
   );
 }
