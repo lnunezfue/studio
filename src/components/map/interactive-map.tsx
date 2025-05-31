@@ -21,48 +21,50 @@ const defaultIcon = new L.Icon({
 
 interface InteractiveMapProps {
   hospitals: Hospital[];
-  className?: string;
+  className?: string; // For styling the wrapper div (e.g., rounded corners, shadow)
 }
 
 const TACNA_COORDS: L.LatLngExpression = [-18.0146, -70.2534];
 const DEFAULT_ZOOM = 13;
 
-const mapStyle: React.CSSProperties = { height: '400px', width: '100%' };
-
+// This is the component that will be dynamically imported by the page
 const InteractiveMapComponent = React.memo(function InteractiveMap({ hospitals, className }: InteractiveMapProps) {
   return (
-    <MapContainer
-        id="hospitals-map-leaflet-container" // Static ID for the map container
-        center={TACNA_COORDS}
-        zoom={DEFAULT_ZOOM}
-        scrollWheelZoom={true}
-        className={className}
-        style={mapStyle}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {hospitals.map((hospital) => {
-        const position: L.LatLngExpression = hospital.geolocalizacion
-          ? [hospital.geolocalizacion.lat, hospital.geolocalizacion.lng]
-          : TACNA_COORDS;
+    // This wrapper div gets the className for styling (e.g. rounded, shadow)
+    // and explicitly sets the dimensions for the map area.
+    <div className={className} style={{ height: '400px', width: '100%' }}>
+      <MapContainer
+          id="hospitals-map-leaflet-container" // Static ID for the map container
+          center={TACNA_COORDS}
+          zoom={DEFAULT_ZOOM}
+          scrollWheelZoom={true}
+          style={{ height: '100%', width: '100%' }} // MapContainer fills the wrapper
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {hospitals.map((hospital) => {
+          const position: L.LatLngExpression = hospital.geolocalizacion
+            ? [hospital.geolocalizacion.lat, hospital.geolocalizacion.lng]
+            : TACNA_COORDS; // Fallback, though ideally all hospitals have coords
 
-        return (
-          <Marker key={hospital.id} position={position} icon={defaultIcon}>
-            <Popup>
-              <div className="space-y-1">
-                <h3 className="font-semibold text-base">{hospital.nombre}</h3>
-                <p className="text-xs text-muted-foreground">{hospital.direccion}</p>
-                <Button asChild variant="link" size="sm" className="p-0 h-auto text-xs">
-                  <Link href={`/hospitals/${hospital.id}`}>View Details</Link>
-                </Button>
-              </div>
-            </Popup>
-          </Marker>
-        );
-      })}
-    </MapContainer>
+          return (
+            <Marker key={hospital.id} position={position} icon={defaultIcon}>
+              <Popup>
+                <div className="space-y-1">
+                  <h3 className="font-semibold text-base">{hospital.nombre}</h3>
+                  <p className="text-xs text-muted-foreground">{hospital.direccion}</p>
+                  <Button asChild variant="link" size="sm" className="p-0 h-auto text-xs">
+                    <Link href={`/hospitals/${hospital.id}`}>View Details</Link>
+                  </Button>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MapContainer>
+    </div>
   );
 });
 
