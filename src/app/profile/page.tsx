@@ -1,3 +1,4 @@
+
 "use client";
 
 import { MainLayout } from "@/components/layout/main-layout";
@@ -77,7 +78,7 @@ export default function ProfilePage() {
         <CardHeader className="items-center text-center pb-4">
           <div className="relative">
             <Avatar className="w-32 h-32 mb-4 border-4 border-primary shadow-md">
-              <AvatarImage src={formData.fotoPerfil || "https://placehold.co/200x200.png"} alt={formData.nombre || ''} data-ai-hint="user custom avatar" />
+              <AvatarImage src={formData.fotoPerfil || "https://images.unsplash.com/photo-1564091521058-3ec9215286b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxMdWlzfGVufDB8fHx8MTc0ODczMjMzNnww&ixlib=rb-4.1.0&q=80&w=1080"} alt={formData.nombre || ''} data-ai-hint="user custom avatar" />
               <AvatarFallback>{formData.nombre ? getInitials(formData.nombre) : 'U'}</AvatarFallback>
             </Avatar>
             {isEditing && (
