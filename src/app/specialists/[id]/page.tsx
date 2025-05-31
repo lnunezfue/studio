@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { mockSpecialists, mockHospitals, mockUser } from "@/lib/mock-data";
+import { mockSpecialists, mockHospitals, mockUser, mockAppointments } from "@/lib/mock-data"; // Import mockAppointments
 import type { Specialist, Appointment } from "@/types";
 import { CalendarDays, Clock, Hospital as HospitalIcon, MessageSquareText } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -84,10 +84,9 @@ export default function SpecialistDetailPage() {
       razonConsulta: razonConsulta,
     };
 
-    console.log("Booking appointment:", newAppointment);
-    // In a real app, you would save this to your mockAppointments array or a backend
-    // For now, we'll just show a success toast and redirect.
-    // Consider adding 'newAppointment' to 'mockAppointments' in mock-data.ts or managing state globally for persistence in demo.
+    // Add to the mockAppointments array for immediate reflection on the appointments page (client-side simulation)
+    mockAppointments.push(newAppointment);
+    
     toast({
       title: "¡Cita Agendada!",
       description: `Tu cita con ${specialist.nombre} el ${selectedDate.toLocaleDateString()} a las ${selectedTime} ha sido programada.`,
