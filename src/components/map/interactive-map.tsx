@@ -40,14 +40,17 @@ const TACNA_COORDS: L.LatLngExpression = [-18.0146, -70.2534];
 const DEFAULT_ZOOM = 13;
 
 export function InteractiveMap({ hospitals, className }: InteractiveMapProps) {
-  // This check helps prevent rendering attempts if dynamic imports somehow haven't resolved,
-  // though `ssr: false` and the loading state for MapContainer should mostly cover this.
-  if (typeof window === 'undefined') {
-    return <div className={className} style={{ height: '400px', backgroundColor: '#e0e0e0' }}>Initializing map...</div>;
-  }
-
+  // The MapContainer is dynamically imported with ssr: false, 
+  // so it will only render on the client. The explicit typeof window === 'undefined' 
+  // check was likely redundant and could interfere.
   return (
-    <MapContainer center={TACNA_COORDS} zoom={DEFAULT_ZOOM} scrollWheelZoom={true} className={className} style={{ height: '400px', width: '100%' }}>
+    <MapContainer 
+        center={TACNA_COORDS} 
+        zoom={DEFAULT_ZOOM} 
+        scrollWheelZoom={true} 
+        className={className} 
+        style={{ height: '400px', width: '100%' }}
+    >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
