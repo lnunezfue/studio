@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -14,7 +15,7 @@ import {
   Bot,
   Video,
   UserCircle,
-  Stethoscope,
+  FileText, // Added for Medical History
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -22,6 +23,7 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/directory', label: 'Directory', icon: ListChecks },
   { href: '/appointments', label: 'My Appointments', icon: CalendarCheck },
+  { href: '/medical-history', label: 'Medical History', icon: FileText }, // New item
   { href: '/ai-guidance', label: 'AI Guidance', icon: Bot },
   { href: '/telemedicine', label: 'Telemedicine', icon: Video },
   { href: '/profile', label: 'Profile', icon: UserCircle },

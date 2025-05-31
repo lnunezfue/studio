@@ -136,11 +136,11 @@ export default function TelemedicinePage() {
                     </p>
                   </CardContent>
                   <CardFooter className="border-t pt-4">
-                     <DialogTrigger asChild>
+                     <Dialog asChild>
                        <Button variant="outline" size="sm" onClick={() => handleOpenNotesDialog(session)}>
                          <Edit3 className="w-4 h-4 mr-2" /> {session.notasConsulta ? 'Edit' : 'Add'} Notes
                        </Button>
-                     </DialogTrigger>
+                     </Dialog>
                      {session.estado === 'programada' && (
                        <Button variant="ghost" size="sm" className="ml-auto text-destructive hover:text-destructive" disabled>
                          Cancel Session

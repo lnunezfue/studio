@@ -1,11 +1,14 @@
+
 import { MainLayout } from "@/components/layout/main-layout";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { mockAppointments, mockUser } from "@/lib/mock-data";
-import { ArrowRight, Bot, CalendarCheck, ListChecks, Video } from "lucide-react";
+import { mockAppointments, mockUser, mockActiveTreatments } from "@/lib/mock-data";
+import { ArrowRight, Bot, CalendarCheck, ListChecks, Video, Activity, FileText, Pill } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { format, parseISO } from 'date-fns';
 
 export default function DashboardPage() {
   const upcomingAppointments = mockAppointments.filter(apt => new Date(apt.fechaHora) > new Date() && apt.estado === 'programada');
@@ -37,6 +40,36 @@ export default function DashboardPage() {
 
         <Card className="shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Treatments</CardTitle>
+            <Activity className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{mockActiveTreatments.length}</div>
+            {mockActiveTreatments.length > 0 ? (
+              <p className="text-xs text-muted-foreground truncate">
+                e.g., {mockActiveTreatments[0].name}
+              </p>
+            ) : (
+              <p className="text-xs text-muted-foreground">No active treatments.</p>
+            )}
+          </CardContent>
+           <CardFooter>
+            {mockActiveTreatments.length > 0 ? (
+               <Link href="/medical-history?tab=prescriptions" className="w-full">
+                <Button variant="outline" size="sm" className="w-full">
+                  View Treatments <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            ) : (
+              <Button variant="outline" size="sm" className="w-full" disabled>
+                View Treatments <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+        
+        <Card className="shadow-lg">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">AI Medical Guidance</CardTitle>
             <Bot className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
@@ -52,25 +85,33 @@ export default function DashboardPage() {
             </Button>
           </CardFooter>
         </Card>
-
-        <Card className="shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Telemedicine</CardTitle>
-            <Video className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">Consult Online</div>
-            <p className="text-xs text-muted-foreground">
-              Connect with a doctor via video call.
-            </p>
-          </CardContent>
-          <CardFooter>
-            <Button asChild variant="outline" size="sm" className="w-full">
-              <Link href="/telemedicine">Find a Doctor <ArrowRight className="ml-2 h-4 w-4" /></Link>
-            </Button>
-          </CardFooter>
-        </Card>
       </div>
+
+      {mockActiveTreatments.length > 0 && (
+        <div className="mt-8">
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center"><Pill className="w-5 h-5 mr-2 text-primary" /> Current Medications</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {mockActiveTreatments.slice(0,2).map(treatment => (
+                <div key={treatment.id} className="p-3 border rounded-md bg-secondary/30">
+                  <h4 className="font-semibold">{treatment.name}</h4>
+                  <p className="text-sm text-muted-foreground">{treatment.dosage} - {treatment.frequency}</p>
+                  <p className="text-xs text-muted-foreground">Prescribed by: {treatment.prescribingDoctor}</p>
+                  <p className="text-xs text-muted-foreground">Started: {format(parseISO(treatment.startDate), "MMMM d, yyyy")}</p>
+                </div>
+              ))}
+               {mockActiveTreatments.length > 2 && (
+                 <Button asChild variant="link" size="sm" className="p-0 h-auto">
+                    <Link href="/medical-history?tab=prescriptions">View all {mockActiveTreatments.length} treatments...</Link>
+                 </Button>
+               )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
 
       <div className="mt-8">
         <Card className="shadow-lg">
@@ -87,10 +128,22 @@ export default function DashboardPage() {
             <QuickActionCard
               title="Book New Appointment"
               description="Schedule your next visit with a specialist."
-              href="/directory" // Or a dedicated booking page
+              href="/directory" 
               icon={<CalendarCheck className="h-8 w-8 text-primary" />}
             />
-             <div className="relative group overflow-hidden rounded-lg">
+            <QuickActionCard
+              title="View Medical History"
+              description="Access your diagnoses, prescriptions, and lab results."
+              href="/medical-history"
+              icon={<FileText className="h-8 w-8 text-primary" />}
+            />
+             <QuickActionCard
+                title="Telemedicine Consultations"
+                description="Connect with a doctor via video call."
+                href="/telemedicine"
+                icon={<Video className="h-8 w-8 text-primary" />}
+            />
+             <div className="relative group overflow-hidden rounded-lg col-span-1 sm:col-span-2 lg:col-span-1">
               <Image 
                 src="https://placehold.co/400x250.png" 
                 alt="Health awareness" 

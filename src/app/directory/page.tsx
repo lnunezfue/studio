@@ -1,3 +1,4 @@
+
 "use client";
 
 import { MainLayout } from "@/components/layout/main-layout";
@@ -7,12 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockHospitals, mockSpecialists } from "@/lib/mock-data";
 import type { Hospital, Specialist } from "@/types";
-import { Hospital as HospitalIcon, Search, Stethoscope, MapPin, Filter } from "lucide-react";
+import { Hospital as HospitalIcon, Search, Stethoscope, MapPin, ListChecks, ShieldCheck, Package } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default function DirectoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,13 +27,16 @@ export default function DirectoryPage() {
 
   const filteredHospitals = useMemo(() => 
     mockHospitals.filter(hospital => 
-      hospital.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+      hospital.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      hospital.serviciosOfrecidos?.some(s => s.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      hospital.insumosClave?.some(i => i.toLowerCase().includes(searchTerm.toLowerCase()))
     )
   , [searchTerm]);
 
   const filteredSpecialists = useMemo(() =>
     mockSpecialists.filter(specialist =>
-      specialist.nombre.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (specialist.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      specialist.especialidad.toLowerCase().includes(searchTerm.toLowerCase())) &&
       (selectedSpecialty === 'all' || specialist.especialidad === selectedSpecialty) &&
       (selectedHospitalFilter === 'all' || specialist.hospitalID === selectedHospitalFilter)
     )
@@ -47,12 +52,12 @@ export default function DirectoryPage() {
       <div className="mb-6 p-4 border rounded-lg bg-card shadow">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
           <div className="space-y-2">
-            <label htmlFor="search" className="text-sm font-medium">Search by Name</label>
+            <label htmlFor="search" className="text-sm font-medium">Search by Name, Service, or Supply</label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
                 id="search"
-                placeholder="Search hospitals or specialists..."
+                placeholder="Search hospitals, specialists, services..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -90,9 +95,9 @@ export default function DirectoryPage() {
       </div>
 
       <Tabs defaultValue="hospitals">
-        <TabsList className="grid w-full grid-cols-2 md:w-1/2">
-          <TabsTrigger value="hospitals">Hospitals ({filteredHospitals.length})</TabsTrigger>
-          <TabsTrigger value="specialists">Specialists ({filteredSpecialists.length})</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-flex">
+          <TabsTrigger value="hospitals" className="flex items-center gap-2"><HospitalIcon className="h-4 w-4"/>Hospitals ({filteredHospitals.length})</TabsTrigger>
+          <TabsTrigger value="specialists" className="flex items-center gap-2"><Stethoscope className="h-4 w-4"/>Specialists ({filteredSpecialists.length})</TabsTrigger>
         </TabsList>
         <TabsContent value="hospitals" className="mt-6">
           {filteredHospitals.length > 0 ? (
@@ -124,7 +129,7 @@ export default function DirectoryPage() {
 function HospitalCard({ hospital }: { hospital: Hospital }) {
   return (
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-      <CardHeader className="p-0">
+      <CardHeader className="p-0 relative">
         <Image 
           src={hospital.imagenUrl || "https://placehold.co/600x400.png"} 
           alt={hospital.nombre} 
@@ -133,13 +138,42 @@ function HospitalCard({ hospital }: { hospital: Hospital }) {
           className="w-full h-48 object-cover"
           data-ai-hint="hospital building"
         />
+        <Badge variant="secondary" className="absolute top-2 right-2">{hospital.tipo || 'N/A'}</Badge>
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <CardTitle className="text-lg font-headline mb-1">{hospital.nombre}</CardTitle>
-        <CardDescription className="text-sm text-muted-foreground mb-2 flex items-center">
+        <CardDescription className="text-sm text-muted-foreground mb-3 flex items-center">
           <MapPin className="w-4 h-4 mr-1.5 flex-shrink-0" /> {hospital.direccion}
         </CardDescription>
-        <p className="text-sm text-foreground">Type: {hospital.tipo || 'N/A'}</p>
+        
+        {hospital.serviciosOfrecidos && hospital.serviciosOfrecidos.length > 0 && (
+          <div className="mb-3">
+            <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-1 flex items-center">
+              <ListChecks className="w-3.5 h-3.5 mr-1.5" /> Services Offered
+            </h4>
+            <div className="flex flex-wrap gap-1">
+              {hospital.serviciosOfrecidos.slice(0, 3).map(service => (
+                <Badge key={service} variant="outline" className="text-xs">{service}</Badge>
+              ))}
+              {hospital.serviciosOfrecidos.length > 3 && <Badge variant="outline" className="text-xs">+{hospital.serviciosOfrecidos.length - 3} more</Badge>}
+            </div>
+          </div>
+        )}
+
+        {hospital.insumosClave && hospital.insumosClave.length > 0 && (
+          <div>
+            <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-1 flex items-center">
+              <Package className="w-3.5 h-3.5 mr-1.5" /> Key Supplies
+            </h4>
+            <div className="flex flex-wrap gap-1">
+              {hospital.insumosClave.slice(0, 3).map(insumo => (
+                <Badge key={insumo} variant="outline" className="text-xs bg-secondary/50">{insumo}</Badge>
+              ))}
+              {hospital.insumosClave.length > 3 && <Badge variant="outline" className="text-xs bg-secondary/50">+{hospital.insumosClave.length - 3} more</Badge>}
+            </div>
+          </div>
+        )}
+
       </CardContent>
       <CardFooter className="p-4 border-t">
         <Button variant="outline" size="sm" className="w-full" disabled>View Details</Button>
@@ -152,7 +186,7 @@ function SpecialistCard({ specialist }: { specialist: Specialist }) {
   const hospital = mockHospitals.find(h => h.id === specialist.hospitalID);
   return (
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-      <CardHeader className="flex flex-row items-center gap-4 p-4 bg-secondary/30">
+      <CardHeader className="flex flex-row items-center gap-4 p-4 bg-card">
         <Image 
           src={specialist.fotoPerfilUrl || "https://placehold.co/100x100.png"} 
           alt={specialist.nombre} 
@@ -182,4 +216,3 @@ function SpecialistCard({ specialist }: { specialist: Specialist }) {
     </Card>
   );
 }
-

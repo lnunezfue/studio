@@ -1,3 +1,4 @@
+
 export interface User {
   id: string;
   nombre: string;
@@ -16,6 +17,8 @@ export interface Hospital {
   tipo?: string; // e.g., General, Rural Clinic
   estadoConsultorios?: { consultorioId: string; ocupado: boolean }[]; // Simplified
   imagenUrl?: string; // URL to image
+  serviciosOfrecidos?: string[]; // New: e.g., ["Radiología", "Laboratorio", "Emergencia 24h"]
+  insumosClave?: string[]; // New: e.g., ["Vacuna Antigripal", "Antibióticos Comunes"]
 }
 
 export interface Specialist {
@@ -40,7 +43,7 @@ export interface Appointment {
 }
 
 export interface Vaccine {
-  id: string;
+  id:string;
   nombre: string;
   stockDisponible: number;
   hospitalID: string; // fk to Hospital
@@ -86,4 +89,25 @@ export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: number;
+}
+
+export interface ActiveTreatment {
+  id: string;
+  name: string;
+  description: string;
+  startDate: string; // ISO date string
+  prescribingDoctor: string;
+  dosage?: string;
+  frequency?: string;
+}
+
+export interface MedicalRecord {
+  id: string;
+  type: 'Diagnóstico' | 'Prescripción' | 'Resultado de Laboratorio' | 'Nota de Progreso' | 'Vacunación';
+  date: string; // ISO date string
+  title: string;
+  summary: string;
+  doctorName?: string;
+  documentUrl?: string; // Optional link to a mock document/image
+  details?: Record<string, any>; // For specific fields like lab values
 }
