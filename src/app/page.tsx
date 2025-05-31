@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, CalendarHeart, MessageSquareHeart, Users } from "lucide-react";
@@ -33,7 +34,7 @@ export default function LandingPage() {
           </Button>
           <div className="mt-16">
             <Image 
-              src="https://placehold.co/800x400.png" 
+              src="https://images.unsplash.com/photo-1499789236202-ee68fec859fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxUYWNuYXxlbnwwfHx8fDE3NDg3MzE3OTN8MA&ixlib=rb-4.1.0&q=80&w=1080" 
               alt="Rural healthcare illustration" 
               width={800} 
               height={400} 
