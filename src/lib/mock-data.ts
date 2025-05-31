@@ -1,6 +1,14 @@
 
 import type { Hospital, Specialist, Appointment, TelemedicineSession, User, ActiveTreatment, MedicalRecord } from '@/types';
 
+// Helper function to generate future ISO date-time strings
+const getFutureSlot = (daysInFuture: number, hour: number, minute: number = 0): string => {
+  const dt = new Date();
+  dt.setDate(dt.getDate() + daysInFuture);
+  dt.setHours(hour, minute, 0, 0);
+  return dt.toISOString();
+};
+
 export const mockUser: User = {
   id: 'user1',
   nombre: 'Juan Perez',
@@ -42,7 +50,16 @@ export const mockSpecialists: Specialist[] = [
     nombre: 'Dr. Ana García',
     especialidad: 'Medicina General',
     hospitalID: 'hospital1',
-    horariosDisponibles: ['2024-08-01T09:00:00', '2024-08-01T10:00:00', '2024-08-02T14:00:00', new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T10:00:00', new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T11:00:00'],
+    horariosDisponibles: [
+      getFutureSlot(1, 9, 0),   // Tomorrow 9:00 AM
+      getFutureSlot(1, 10, 0),  // Tomorrow 10:00 AM
+      getFutureSlot(1, 11, 30), // Tomorrow 11:30 AM
+      getFutureSlot(2, 14, 0),  // Day after tomorrow 2:00 PM
+      getFutureSlot(2, 15, 0),  // Day after tomorrow 3:00 PM
+      getFutureSlot(3, 9, 0),   // In 3 days 9:00 AM
+      getFutureSlot(3, 10, 30), // In 3 days 10:30 AM
+      getFutureSlot(4, 16, 0),  // In 4 days 4:00 PM
+    ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Médica general con 5 años de experiencia en atención primaria.',
   },
@@ -51,7 +68,14 @@ export const mockSpecialists: Specialist[] = [
     nombre: 'Dr. Carlos López',
     especialidad: 'Pediatría',
     hospitalID: 'hospital1',
-    horariosDisponibles: ['2024-08-01T11:00:00', '2024-08-03T09:00:00', new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T11:00:00', new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T12:00:00'],
+    horariosDisponibles: [
+      getFutureSlot(1, 11, 0),  // Tomorrow 11:00 AM
+      getFutureSlot(1, 12, 0),  // Tomorrow 12:00 PM
+      getFutureSlot(2, 9, 0),   // Day after tomorrow 9:00 AM
+      getFutureSlot(2, 10, 0),  // Day after tomorrow 10:00 AM
+      getFutureSlot(3, 14, 30), // In 3 days 2:30 PM
+      getFutureSlot(4, 10, 0),  // In 4 days 10:00 AM
+    ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Pediatra dedicado al cuidado de la salud infantil.',
   },
@@ -60,7 +84,14 @@ export const mockSpecialists: Specialist[] = [
     nombre: 'Dra. Laura Torres',
     especialidad: 'Ginecología',
     hospitalID: 'hospital2',
-    horariosDisponibles: ['2024-08-02T10:00:00', '2024-08-02T11:00:00', new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T15:00:00', new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T16:00:00'],
+    horariosDisponibles: [
+      getFutureSlot(1, 15, 0),  // Tomorrow 3:00 PM
+      getFutureSlot(1, 16, 0),  // Tomorrow 4:00 PM
+      getFutureSlot(2, 10, 30), // Day after tomorrow 10:30 AM
+      getFutureSlot(2, 11, 30), // Day after tomorrow 11:30 AM
+      getFutureSlot(3, 16, 0),  // In 3 days 4:00 PM
+      getFutureSlot(4, 11, 0),  // In 4 days 11:00 AM
+    ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Especialista en salud femenina y obstetricia.',
   },
@@ -72,7 +103,7 @@ export const mockAppointments: Appointment[] = [
     pacienteID: 'user1',
     especialistaID: 'specialist1',
     hospitalID: 'hospital1',
-    fechaHora: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // In 2 days
+    fechaHora: getFutureSlot(2, 10, 0), // In 2 days, ensuring it's likely bookable
     estado: 'programada',
     recordatorioActivado: true,
     razonConsulta: 'Chequeo general anual.',
@@ -82,7 +113,7 @@ export const mockAppointments: Appointment[] = [
     pacienteID: 'user1',
     especialistaID: 'specialist2',
     hospitalID: 'hospital1',
-    fechaHora: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // In 5 days
+    fechaHora: getFutureSlot(5, 11, 0), // In 5 days
     estado: 'programada',
     recordatorioActivado: false,
     razonConsulta: 'Vacunación infantil.',
@@ -158,7 +189,8 @@ export const mockMedicalHistory: MedicalRecord[] = [
     title: 'Perfil Lipídico',
     summary: 'Colesterol total: 190 mg/dL, LDL: 110 mg/dL, HDL: 50 mg/dL. Dentro de rangos aceptables.',
     doctorName: 'Laboratorio Central',
-    documentUrl: 'https://placehold.co/200x300.png?text=LabResults', // Mock document
+    documentUrl: 'https://placehold.co/200x300.png?text=LabResults', 
+    dataAiHint: 'lab results document' 
   },
   {
     id: 'hist4',
@@ -177,3 +209,5 @@ export const mockMedicalHistory: MedicalRecord[] = [
     doctorName: 'Dr. Ana García (Telemedicina)',
   }
 ];
+
+    
