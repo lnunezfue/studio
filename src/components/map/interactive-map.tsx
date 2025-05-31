@@ -1,7 +1,7 @@
 
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Added useState, useEffect
 import type { Hospital } from '@/types';
 import L from 'leaflet';
 import Link from 'next/link';
@@ -29,6 +29,25 @@ const DEFAULT_ZOOM = 13;
 
 // This is the component that will be dynamically imported by the page
 const InteractiveMapComponent = React.memo(function InteractiveMap({ hospitals, className }: InteractiveMapProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  if (!isMounted) {
+    // This placeholder will be shown while waiting for the client-side mount.
+    // The parent page also has a loading state for the dynamic import of this component.
+    return (
+      <div 
+        className={className} 
+        style={{ height: '400px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f0f0' }}
+      >
+        <p>Initializing map...</p>
+      </div>
+    );
+  }
+
   return (
     // This wrapper div gets the className for styling (e.g. rounded, shadow)
     // and explicitly sets the dimensions for the map area.
