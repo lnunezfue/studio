@@ -1,5 +1,3 @@
-/* Import Leaflet CSS */
-@import "leaflet/dist/leaflet.css";
 
 @tailwind base;
 @tailwind components;
@@ -90,23 +88,30 @@
   }
 }
 
-/* Leaflet popup customization to better fit ShadCN theme */
-.leaflet-popup-content-wrapper {
-  @apply rounded-md border bg-popover text-popover-foreground shadow-md;
-  padding: 1px; /* Leaflet adds its own padding inside .leaflet-popup-content */
+/* Ensure Google Maps InfoWindows adapt to ShadCN theme */
+.gm-style .gm-style-iw-c { /* Main InfoWindow container */
+  @apply rounded-md border bg-popover text-popover-foreground shadow-md !important;
+  padding: 0 !important; /* Override default padding */
 }
-.leaflet-popup-content {
-  @apply text-sm p-2;
-  margin: 8px 10px; /* Adjust default leaflet margins */
+
+.gm-style .gm-style-iw-d { /* Content container inside InfoWindow */
+  overflow: auto !important; /* Ensure content is scrollable if it overflows */
+  padding: theme('spacing.3') !important; /* Apply ShadCN consistent padding */
 }
-.leaflet-popup-tip-container {
-  width: 40px;
-  height: 20px;
+
+.gm-style .gm-style-iw-t::after { /* InfoWindow tail/tip */
+  @apply bg-popover !important;
+  /* Tailwind doesn't directly support box-shadow on pseudo-elements easily,
+     but the border on gm-style-iw-c should provide enough visual separation.
+     If a stronger shadow is needed for the tail, it might require more complex CSS. */
 }
-.leaflet-popup-tip {
-  @apply bg-popover border-transparent shadow-none;
+
+/* Optional: Style the close button if needed, though default might be fine */
+.gm-style .gm-ui-hover-effect { /* Close button */
+  top: theme('spacing.2') !important;
+  right: theme('spacing.2') !important;
 }
-.leaflet-container a.leaflet-popup-close-button {
-  @apply text-popover-foreground/70 hover:text-popover-foreground;
-  padding: 6px 6px 0 0;
+.gm-style .gm-ui-hover-effect span {
+  @apply text-popover-foreground/70 hover:text-popover-foreground !important;
 }
+

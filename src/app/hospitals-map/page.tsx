@@ -53,13 +53,15 @@ export default function HospitalsMapPage() {
       <Card className="shadow-xl mb-8">
         <CardHeader>
           <CardTitle className="font-headline">Mapa del Área de Tacna</CardTitle>
-          <CardDescription>Añade un mapa interactivo en este apartado utilizando la libreria leaflet , mostrando las ubicaciones de los centros medicos.</CardDescription>
+          <CardDescription>Mapa interactivo mostrando las ubicaciones de los centros medicos.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
+          {/* The InteractiveMap component itself will now define its height.
+              The CardContent can remain p-0 if the map handles its own padding/margins. */}
           <DynamicInteractiveMap 
             hospitals={mockHospitals} 
             className="rounded-b-lg" // For bottom rounding if card content is p-0
-            style={{ height: '400px' }} 
+            style={{ height: '400px' }} // Explicitly set height for the container of GoogleMap
           />
         </CardContent>
       </Card>
