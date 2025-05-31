@@ -15,13 +15,13 @@ import dynamic from 'next/dynamic';
 
 // Dynamically import the InteractiveMap component to ensure it's client-side only
 const DynamicInteractiveMap = dynamic(
-  () => import('@/components/map/interactive-map').then(mod => mod.InteractiveMap),
+  () => import('@/components/map/interactive-map'), // Use alias and expect default export
   { 
     ssr: false,
     loading: () => (
       <div 
-        className="h-[400px] md:h-[500px] w-full bg-muted rounded-b-lg flex items-center justify-center"
-        // Style the loading placeholder to match map dimensions to avoid layout shift
+        className="h-[400px] w-full bg-muted rounded-lg shadow-md flex items-center justify-center"
+        style={{ height: '400px' }} // Explicit height for loading state
       >
         <p className="text-muted-foreground">Loading map...</p>
       </div>
@@ -56,8 +56,11 @@ export default function HospitalsMapPage() {
           <CardDescription>Añade un mapa interactivo en este apartado utilizando la libreria leaflet , mostrando las ubicaciones de los centros medicos.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
-          {/* className on DynamicInteractiveMap is for potential outer styling; height/width are managed inside or via style prop */}
-          <DynamicInteractiveMap hospitals={mockHospitals} className="h-[400px] md:h-[500px] w-full" />
+          <DynamicInteractiveMap 
+            hospitals={mockHospitals} 
+            className="rounded-b-lg" // For bottom rounding if card content is p-0
+            style={{ height: '400px' }} 
+          />
         </CardContent>
       </Card>
 
