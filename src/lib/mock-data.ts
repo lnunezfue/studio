@@ -14,7 +14,7 @@ export const mockUser: User = {
   nombre: 'Juan Perez',
   rol: 'paciente',
   correo: 'juan.perez@example.com',
-  fotoPerfil: 'https://placehold.co/100x100.png',
+  fotoPerfil: 'https://images.unsplash.com/photo-1564091521058-3ec9215286b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxMdWlzfGVufDB8fHx8MTc0ODczMjMzNnww&ixlib=rb-4.1.0&q=80&w=1080', // Updated from placehold.co
   telefono: '555-1234',
   ubicacion: 'Tacna, Tacna',
 };
@@ -301,3 +301,6 @@ export let mockNotifications: NotificationMessage[] = [
     detailsUrl: '/medical-history'
   }
 ];
+
+
+    
