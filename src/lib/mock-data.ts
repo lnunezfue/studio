@@ -14,7 +14,7 @@ export const mockUser: User = {
   nombre: 'Juan Perez',
   rol: 'paciente',
   correo: 'juan.perez@example.com',
-  fotoPerfil: 'https://images.unsplash.com/photo-1564091521058-3ec9215286b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxMdWlzfGVufDB8fHx8MTc0ODczMjMzNnww&ixlib=rb-4.1.0&q=80&w=1080',
+  fotoPerfil: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxQZXJzb25hfGVufDB8fHx8MTc0ODczMjcyNHww&ixlib=rb-4.1.0&q=80&w=1080',
   telefono: '555-1234',
   ubicacion: 'Tacna, Tacna',
 };
@@ -304,5 +304,7 @@ export let mockNotifications: NotificationMessage[] = [
   }
 ];
 
+
+    
 
     

@@ -122,7 +122,7 @@ export function UserNav() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
             <Avatar className="h-10 w-10">
-              <AvatarImage src={user.fotoPerfil || `https://placehold.co/100x100.png`} alt={user.nombre} data-ai-hint="user avatar" />
+              <AvatarImage src={user.fotoPerfil || `https://images.unsplash.com/photo-1633332755192-727a05c4013d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxQZXJzb25hfGVufDB8fHx8MTc0ODczMjcyNHww&ixlib=rb-4.1.0&q=80&w=1080`} alt={user.nombre} data-ai-hint="user avatar" />
               <AvatarFallback>{getInitials(user.nombre)}</AvatarFallback>
             </Avatar>
           </Button>
@@ -163,3 +163,5 @@ export function UserNav() {
     </div>
   );
 }
+
+    
