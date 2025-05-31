@@ -82,7 +82,7 @@ export default function VaccinesPage() {
                 </CardHeader>
                 <CardContent className="flex-grow space-y-3">
                   <Image 
-                    src={vaccine.imageUrl || "https://placehold.co/600x400.png"} 
+                    src={vaccine.imageUrl || "https://images.unsplash.com/photo-1674049406313-abb5511e0111?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxncmlwZXxlbnwwfHx8fDE3NDg3MzI0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080"} 
                     alt={vaccine.nombre} 
                     width={600} 
                     height={200} 
