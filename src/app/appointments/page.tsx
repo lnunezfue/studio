@@ -1,3 +1,4 @@
+
 "use client";
 
 import { MainLayout } from "@/components/layout/main-layout";
@@ -6,15 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { mockAppointments, mockSpecialists, mockHospitals } from "@/lib/mock-data";
 import type { Appointment } from "@/types";
-import { CalendarCheck, Hospital as HospitalIcon, Stethoscope, Info, CheckCircle, XCircle, History, Bell } from "lucide-react";
+import { CalendarCheck, Hospital as HospitalIcon, Stethoscope, Info, CheckCircle, XCircle, History, Bell, MessageSquareText } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import { format, parseISO, isFuture, isPast } from 'date-fns';
 
 export default function AppointmentsPage() {
-  // Use a local state for appointments to demonstrate updates like cancellation or reminder toggle
   const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments);
   const { toast } = useToast();
 
@@ -35,7 +36,7 @@ export default function AppointmentsPage() {
 
   const handleCancelAppointment = (appointmentId: string) => {
     setAppointments(prev => prev.map(apt => apt.id === appointmentId ? {...apt, estado: 'cancelada'} : apt));
-    toast({ title: "Appointment Canceled", description: "Your appointment has been successfully canceled."});
+    toast({ title: "Cita Cancelada", description: "Tu cita ha sido cancelada exitosamente."});
   };
 
   const toggleReminder = (appointmentId: string) => {
@@ -43,8 +44,8 @@ export default function AppointmentsPage() {
       if (apt.id === appointmentId) {
         const newReminderState = !apt.recordatorioActivado;
         toast({ 
-          title: `Reminders ${newReminderState ? 'Enabled' : 'Disabled'}`, 
-          description: `Notifications for this appointment are now ${newReminderState ? 'on' : 'off'}.`
+          title: `Recordatorios ${newReminderState ? 'Activados' : 'Desactivados'}`, 
+          description: `Las notificaciones para esta cita ahora están ${newReminderState ? 'activadas' : 'desactivadas'}.`
         });
         return {...apt, recordatorioActivado: newReminderState };
       }
@@ -55,14 +56,14 @@ export default function AppointmentsPage() {
   return (
     <MainLayout>
       <PageHeader 
-        title="My Appointments"
-        description="Manage your upcoming, past, and canceled medical appointments."
+        title="Mis Citas"
+        description="Administra tus citas médicas programadas, pasadas y canceladas."
       />
       <Tabs defaultValue="upcoming">
         <TabsList className="grid w-full grid-cols-3 md:w-auto md:inline-flex">
-          <TabsTrigger value="upcoming" className="flex items-center gap-2"><CalendarCheck className="h-4 w-4" />Upcoming ({upcomingAppointments.length})</TabsTrigger>
-          <TabsTrigger value="past" className="flex items-center gap-2"><History className="h-4 w-4" />Past ({pastAppointments.length})</TabsTrigger>
-          <TabsTrigger value="canceled" className="flex items-center gap-2"><XCircle className="h-4 w-4" />Canceled ({canceledAppointments.length})</TabsTrigger>
+          <TabsTrigger value="upcoming" className="flex items-center gap-2"><CalendarCheck className="h-4 w-4" />Programadas ({upcomingAppointments.length})</TabsTrigger>
+          <TabsTrigger value="past" className="flex items-center gap-2"><History className="h-4 w-4" />Pasadas ({pastAppointments.length})</TabsTrigger>
+          <TabsTrigger value="canceled" className="flex items-center gap-2"><XCircle className="h-4 w-4" />Canceladas ({canceledAppointments.length})</TabsTrigger>
         </TabsList>
         
         <TabsContent value="upcoming" className="mt-6">
@@ -88,7 +89,7 @@ interface AppointmentListProps {
 
 function AppointmentList({ appointments, onCancel, onToggleReminder, type }: AppointmentListProps) {
   if (appointments.length === 0) {
-    return <p className="text-center text-muted-foreground py-8">No {type} appointments found.</p>;
+    return <p className="text-center text-muted-foreground py-8">No se encontraron citas {type}.</p>;
   }
   return (
     <div className="space-y-4">
@@ -115,44 +116,49 @@ function AppointmentCard({ appointment, onCancel, onToggleReminder, type }: Appo
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between sm:items-center">
           <CardTitle className="text-lg font-headline mb-2 sm:mb-0">
-            {format(parseISO(appointment.fechaHora), "EEEE, MMMM d, yyyy 'at' h:mm a")}
+            {format(parseISO(appointment.fechaHora), "EEEE, d 'de' MMMM, yyyy 'a las' h:mm a")}
           </CardTitle>
           {type === 'upcoming' && (
              <div className="flex items-center space-x-2">
               <Bell className={`w-4 h-4 ${appointment.recordatorioActivado ? 'text-accent' : 'text-muted-foreground'}`} />
-              <span className="text-xs text-muted-foreground">Reminders {appointment.recordatorioActivado ? 'On' : 'Off'}</span>
+              <span className="text-xs text-muted-foreground">Recordatorios {appointment.recordatorioActivado ? 'Act.' : 'Desact.'}</span>
               <Switch 
                 checked={appointment.recordatorioActivado} 
                 onCheckedChange={() => onToggleReminder && onToggleReminder(appointment.id)}
-                aria-label="Toggle appointment reminders"
+                aria-label="Alternar recordatorios de cita"
               />
             </div>
           )}
-           {type === 'past' && <Badge variant="outline" className="text-green-600 border-green-600"><CheckCircle className="w-4 h-4 mr-1" />Completed</Badge>}
-           {type === 'canceled' && <Badge variant="destructive"><XCircle className="w-4 h-4 mr-1" />Canceled</Badge>}
+           {type === 'past' && <Badge variant="outline" className="text-green-600 border-green-600"><CheckCircle className="w-4 h-4 mr-1" />Completada</Badge>}
+           {type === 'canceled' && <Badge variant="destructive"><XCircle className="w-4 h-4 mr-1" />Cancelada</Badge>}
         </div>
         {specialist && (
-          <CardDescription className="flex items-center text-base">
-            <Stethoscope className="w-4 h-4 mr-2 text-primary flex-shrink-0" /> With {specialist.nombre} ({specialist.especialidad})
+          <CardDescription className="flex items-center text-base mt-1">
+            <Stethoscope className="w-4 h-4 mr-2 text-primary flex-shrink-0" /> Con {specialist.nombre} ({specialist.especialidad})
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-2">
         {hospital && (
-          <p className="text-sm text-muted-foreground flex items-center mb-1">
-            <HospitalIcon className="w-4 h-4 mr-2 flex-shrink-0" /> At {hospital.nombre}
+          <p className="text-sm text-muted-foreground flex items-center">
+            <HospitalIcon className="w-4 h-4 mr-2 flex-shrink-0" /> En {hospital.nombre}
+          </p>
+        )}
+        {appointment.razonConsulta && (
+          <p className="text-sm text-muted-foreground flex items-start">
+            <MessageSquareText className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0 text-primary" /> Motivo: {appointment.razonConsulta}
           </p>
         )}
         {appointment.notas && (
           <p className="text-sm text-muted-foreground flex items-start">
-            <Info className="w-4 h-4 mr-2 mt-1 flex-shrink-0" /> Notes: {appointment.notas}
+            <Info className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" /> Notas: {appointment.notas}
           </p>
         )}
       </CardContent>
       {type === 'upcoming' && onCancel && (
         <CardFooter className="border-t pt-4">
           <Button variant="destructive" size="sm" onClick={() => onCancel(appointment.id)}>
-            Cancel Appointment
+            Cancelar Cita
           </Button>
         </CardFooter>
       )}

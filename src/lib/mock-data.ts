@@ -42,7 +42,7 @@ export const mockSpecialists: Specialist[] = [
     nombre: 'Dr. Ana García',
     especialidad: 'Medicina General',
     hospitalID: 'hospital1',
-    horariosDisponibles: ['2024-08-01T09:00:00', '2024-08-01T10:00:00', '2024-08-02T14:00:00', new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T10:00:00'],
+    horariosDisponibles: ['2024-08-01T09:00:00', '2024-08-01T10:00:00', '2024-08-02T14:00:00', new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T10:00:00', new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T11:00:00'],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Médica general con 5 años de experiencia en atención primaria.',
   },
@@ -51,7 +51,7 @@ export const mockSpecialists: Specialist[] = [
     nombre: 'Dr. Carlos López',
     especialidad: 'Pediatría',
     hospitalID: 'hospital1',
-    horariosDisponibles: ['2024-08-01T11:00:00', '2024-08-03T09:00:00', new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T11:00:00'],
+    horariosDisponibles: ['2024-08-01T11:00:00', '2024-08-03T09:00:00', new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T11:00:00', new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T12:00:00'],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Pediatra dedicado al cuidado de la salud infantil.',
   },
@@ -60,7 +60,7 @@ export const mockSpecialists: Specialist[] = [
     nombre: 'Dra. Laura Torres',
     especialidad: 'Ginecología',
     hospitalID: 'hospital2',
-    horariosDisponibles: ['2024-08-02T10:00:00', '2024-08-02T11:00:00', new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T15:00:00'],
+    horariosDisponibles: ['2024-08-02T10:00:00', '2024-08-02T11:00:00', new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T15:00:00', new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + 'T16:00:00'],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Especialista en salud femenina y obstetricia.',
   },
@@ -75,6 +75,7 @@ export const mockAppointments: Appointment[] = [
     fechaHora: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // In 2 days
     estado: 'programada',
     recordatorioActivado: true,
+    razonConsulta: 'Chequeo general anual.',
   },
   {
     id: 'apt2',
@@ -84,6 +85,7 @@ export const mockAppointments: Appointment[] = [
     fechaHora: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // In 5 days
     estado: 'programada',
     recordatorioActivado: false,
+    razonConsulta: 'Vacunación infantil.',
   },
    {
     id: 'apt3',
@@ -93,7 +95,8 @@ export const mockAppointments: Appointment[] = [
     fechaHora: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
     estado: 'completada',
     recordatorioActivado: false,
-    notas: "Consulta de rutina, todo en orden."
+    notas: "Consulta de rutina, todo en orden.",
+    razonConsulta: 'Control ginecológico.',
   },
 ];
 

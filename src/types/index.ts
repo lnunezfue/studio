@@ -40,6 +40,7 @@ export interface Appointment {
   estado: 'programada' | 'cancelada' | 'completada';
   notas?: string;
   recordatorioActivado?: boolean;
+  razonConsulta?: string; // New field for reason for consultation
 }
 
 export interface Vaccine {
