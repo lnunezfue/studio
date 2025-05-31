@@ -14,7 +14,7 @@ export const mockUser: User = {
   nombre: 'Juan Perez',
   rol: 'paciente',
   correo: 'juan.perez@example.com',
-  fotoPerfil: 'https://images.unsplash.com/photo-1564091521058-3ec9215286b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxMdWlzfGVufDB8fHx8MTc0ODczMjMzNnww&ixlib=rb-4.1.0&q=80&w=1080', // Updated from placehold.co
+  fotoPerfil: 'https://images.unsplash.com/photo-1564091521058-3ec9215286b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxMdWlzfGVufDB8fHx8MTc0ODczMjMzNnww&ixlib=rb-4.1.0&q=80&w=1080',
   telefono: '555-1234',
   ubicacion: 'Tacna, Tacna',
 };
@@ -217,6 +217,8 @@ export const mockMedicalHistory: MedicalRecord[] = [
   }
 ];
 
+const vaccineUnsplashUrl = "https://images.unsplash.com/photo-1674049406313-abb5511e0111?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxncmlwZXxlbnwwfHx8fDE3NDg3MzI0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080";
+
 export const mockVaccines: Vaccine[] = [
   {
     id: 'vac-flu-2024',
@@ -228,7 +230,7 @@ export const mockVaccines: Vaccine[] = [
     minAge: 0.5, // 6 meses
     dosesRequired: 1,
     provider: 'MINSA',
-    imageUrl: 'https://placehold.co/600x400.png',
+    imageUrl: vaccineUnsplashUrl,
   },
   {
     id: 'vac-covid-bivalente',
@@ -240,7 +242,7 @@ export const mockVaccines: Vaccine[] = [
     minAge: 12,
     dosesRequired: 1,
     provider: 'EsSalud / Pfizer',
-    imageUrl: 'https://placehold.co/600x400.png',
+    imageUrl: vaccineUnsplashUrl,
   },
   {
     id: 'vac-vph',
@@ -253,7 +255,7 @@ export const mockVaccines: Vaccine[] = [
     maxAge: 26,
     dosesRequired: 2, // o 3 según edad
     provider: 'Clínica Privada / Gardasil 9',
-    imageUrl: 'https://placehold.co/600x400.png',
+    imageUrl: vaccineUnsplashUrl,
   },
   {
     id: 'vac-neumococo',
@@ -265,7 +267,7 @@ export const mockVaccines: Vaccine[] = [
     minAge: 65,
     dosesRequired: 1,
     provider: 'MINSA',
-    imageUrl: 'https://placehold.co/600x400.png',
+    imageUrl: vaccineUnsplashUrl,
   }
 ];
 
