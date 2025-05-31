@@ -3,7 +3,7 @@
 
 import { MainLayout } from "@/components/layout/main-layout";
 import { PageHeader } from "@/components/shared/page-header";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { mockHospitals } from "@/lib/mock-data";
 import type { Hospital } from "@/types";
@@ -97,3 +97,4 @@ export default function HospitalsMapPage() {
     </MainLayout>
   );
 }
+
