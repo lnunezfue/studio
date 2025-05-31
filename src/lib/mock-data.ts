@@ -16,84 +16,105 @@ export const mockUser: User = {
   correo: 'juan.perez@example.com',
   fotoPerfil: 'https://placehold.co/100x100.png',
   telefono: '555-1234',
-  ubicacion: 'Rural Town, XYZ',
+  ubicacion: 'Tacna, Tacna',
 };
 
 export const mockHospitals: Hospital[] = [
   {
-    id: 'hospital1',
-    nombre: 'Hospital Central Rural',
-    direccion: 'Calle Principal 123, Pueblo Lejano',
-    geolocalizacion: { lat: 19.4326, lng: -99.1332 },
-    tipo: 'General',
-    estadoConsultorios: [{ consultorioId: 'c1', ocupado: false }, { consultorioId: 'c2', ocupado: true }],
+    id: 'hosp-unanue-tacna',
+    nombre: 'Hospital Hipólito Unanue de Tacna',
+    direccion: 'Av. Hipólito Unanue 1350, Tacna 23002, Perú',
+    geolocalizacion: { lat: -18.0038, lng: -70.2442 }, // Coordenadas aproximadas
+    tipo: 'Hospital Regional',
+    estadoConsultorios: [
+        { consultorioId: 'c101', ocupado: false }, 
+        { consultorioId: 'c102', ocupado: true },
+        { consultorioId: 'c103', ocupado: false },
+    ],
     imagenUrl: 'https://placehold.co/600x400.png',
-    serviciosOfrecidos: ["Emergencia 24h", "Radiología", "Laboratorio Clínico", "Consulta General"],
-    insumosClave: ["Vacuna Antigripal", "Antibióticos Comunes", "Material de Curación"],
+    serviciosOfrecidos: ["Emergencia 24h", "UCI", "Cirugía General", "Pediatría", "Ginecología", "Laboratorio Clínico", "Radiología"],
+    insumosClave: ["Oxígeno Medicinal", "Antibióticos de Amplio Espectro", "Equipos de Protección Personal"],
   },
   {
-    id: 'hospital2',
-    nombre: 'Clínica Esperanza',
-    direccion: 'Avenida del Sol 45, Villa Serena',
-    geolocalizacion: { lat: 19.4000, lng: -99.1000 },
-    tipo: 'Clínica Rural',
-    estadoConsultorios: [{ consultorioId: 'c1', ocupado: true }],
+    id: 'hosp-essalud-tacna',
+    nombre: 'Hospital III Daniel Alcides Carrión - EsSalud Tacna',
+    direccion: 'Prolongación Pizarro S/N, Tacna 23001, Perú',
+    geolocalizacion: { lat: -18.0095, lng: -70.2490 }, // Coordenadas aproximadas
+    tipo: 'Hospital de EsSalud',
+    estadoConsultorios: [
+        { consultorioId: 'e201', ocupado: true }, 
+        { consultorioId: 'e202', ocupado: false }
+    ],
     imagenUrl: 'https://placehold.co/600x400.png',
-    serviciosOfrecidos: ["Consulta Pediátrica", "Control Prenatal", "Vacunación"],
-    insumosClave: ["Vacunas Pediátricas", "Suplementos Vitamínicos"],
+    serviciosOfrecidos: ["Consulta Externa", "Medicina Interna", "Traumatología", "Farmacia", "Rehabilitación"],
+    insumosClave: ["Medicamentos Crónicos", "Material Ortopédico", "Vacunas"],
+  },
+  {
+    id: 'clin-promedic-tacna',
+    nombre: 'Clínica Promedic Tacna',
+    direccion: 'Av. Bolognesi 1002, Tacna 23001, Perú',
+    geolocalizacion: { lat: -18.0103, lng: -70.2521 }, // Coordenadas aproximadas
+    tipo: 'Clínica Privada',
+    estadoConsultorios: [
+        { consultorioId: 'p301', ocupado: false },
+        { consultorioId: 'p302', ocupado: false },
+    ],
+    imagenUrl: 'https://placehold.co/600x400.png',
+    serviciosOfrecidos: ["Especialidades Médicas", "Chequeos Preventivos", "Ecografías", "Odontología"],
+    insumosClave: ["Insumos Dentales", "Material de Diagnóstico Rápido"],
   },
 ];
 
 export const mockSpecialists: Specialist[] = [
   {
     id: 'specialist1',
-    nombre: 'Dr. Ana García',
+    nombre: 'Dr. Ana García Pérez',
     especialidad: 'Medicina General',
-    hospitalID: 'hospital1',
+    hospitalID: 'hosp-unanue-tacna', // Actualizado
     horariosDisponibles: [
-      getFutureSlot(1, 9, 0),   // Tomorrow 9:00 AM
-      getFutureSlot(1, 10, 0),  // Tomorrow 10:00 AM
-      getFutureSlot(1, 11, 30), // Tomorrow 11:30 AM
-      getFutureSlot(2, 14, 0),  // Day after tomorrow 2:00 PM
-      getFutureSlot(2, 15, 0),  // Day after tomorrow 3:00 PM
-      getFutureSlot(3, 9, 0),   // In 3 days 9:00 AM
-      getFutureSlot(3, 10, 30), // In 3 days 10:30 AM
-      getFutureSlot(4, 16, 0),  // In 4 days 4:00 PM
+      getFutureSlot(1, 9, 0),
+      getFutureSlot(1, 10, 0),
+      getFutureSlot(1, 11, 30),
+      getFutureSlot(2, 14, 0),
+      getFutureSlot(2, 15, 0),
+      getFutureSlot(3, 9, 0),
+      getFutureSlot(3, 10, 30),
+      getFutureSlot(4, 16, 0),
     ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
-    descripcion: 'Médica general con 5 años de experiencia en atención primaria.',
+    descripcion: 'Médica general con 5 años de experiencia en atención primaria en Tacna.',
   },
   {
     id: 'specialist2',
-    nombre: 'Dr. Carlos López',
+    nombre: 'Dr. Carlos López Mendoza',
     especialidad: 'Pediatría',
-    hospitalID: 'hospital1',
+    hospitalID: 'hosp-essalud-tacna', // Actualizado
     horariosDisponibles: [
-      getFutureSlot(1, 11, 0),  // Tomorrow 11:00 AM
-      getFutureSlot(1, 12, 0),  // Tomorrow 12:00 PM
-      getFutureSlot(2, 9, 0),   // Day after tomorrow 9:00 AM
-      getFutureSlot(2, 10, 0),  // Day after tomorrow 10:00 AM
-      getFutureSlot(3, 14, 30), // In 3 days 2:30 PM
-      getFutureSlot(4, 10, 0),  // In 4 days 10:00 AM
+      getFutureSlot(1, 11, 0),
+      getFutureSlot(1, 12, 0),
+      getFutureSlot(2, 9, 0),
+      getFutureSlot(2, 10, 0),
+      getFutureSlot(3, 14, 30),
+      getFutureSlot(4, 10, 0),
     ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
-    descripcion: 'Pediatra dedicado al cuidado de la salud infantil.',
+    descripcion: 'Pediatra dedicado al cuidado de la salud infantil en EsSalud.',
   },
   {
     id: 'specialist3',
-    nombre: 'Dra. Laura Torres',
+    nombre: 'Dra. Laura Torres Quispe',
     especialidad: 'Ginecología',
-    hospitalID: 'hospital2',
+    hospitalID: 'clin-promedic-tacna', // Actualizado
     horariosDisponibles: [
-      getFutureSlot(1, 15, 0),  // Tomorrow 3:00 PM
-      getFutureSlot(1, 16, 0),  // Tomorrow 4:00 PM
-      getFutureSlot(2, 10, 30), // Day after tomorrow 10:30 AM
-      getFutureSlot(2, 11, 30), // Day after tomorrow 11:30 AM
-      getFutureSlot(3, 16, 0),  // In 3 days 4:00 PM
-      getFutureSlot(4, 11, 0),  // In 4 days 11:00 AM
+      getFutureSlot(1, 15, 0),
+      getFutureSlot(1, 16, 0),
+      getFutureSlot(2, 10, 30),
+      getFutureSlot(2, 11, 30),
+      getFutureSlot(3, 16, 0),
+      getFutureSlot(4, 11, 0),
     ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
-    descripcion: 'Especialista en salud femenina y obstetricia.',
+    descripcion: 'Especialista en salud femenina y obstetricia en Clínica Promedic.',
   },
 ];
 
@@ -102,8 +123,8 @@ export const mockAppointments: Appointment[] = [
     id: 'apt1',
     pacienteID: 'user1',
     especialistaID: 'specialist1',
-    hospitalID: 'hospital1',
-    fechaHora: getFutureSlot(2, 10, 0), // In 2 days, ensuring it's likely bookable
+    hospitalID: 'hosp-unanue-tacna', // Actualizado
+    fechaHora: getFutureSlot(2, 10, 0), 
     estado: 'programada',
     recordatorioActivado: true,
     razonConsulta: 'Chequeo general anual.',
@@ -112,8 +133,8 @@ export const mockAppointments: Appointment[] = [
     id: 'apt2',
     pacienteID: 'user1',
     especialistaID: 'specialist2',
-    hospitalID: 'hospital1',
-    fechaHora: getFutureSlot(5, 11, 0), // In 5 days
+    hospitalID: 'hosp-essalud-tacna', // Actualizado
+    fechaHora: getFutureSlot(5, 11, 0),
     estado: 'programada',
     recordatorioActivado: false,
     razonConsulta: 'Vacunación infantil.',
@@ -122,8 +143,8 @@ export const mockAppointments: Appointment[] = [
     id: 'apt3',
     pacienteID: 'user1',
     especialistaID: 'specialist3',
-    hospitalID: 'hospital2',
-    fechaHora: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
+    hospitalID: 'clin-promedic-tacna', // Actualizado
+    fechaHora: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), 
     estado: 'completada',
     recordatorioActivado: false,
     notas: "Consulta de rutina, todo en orden.",
@@ -136,7 +157,7 @@ export const mockTelemedicineSessions: TelemedicineSession[] = [
     id: 'tele1',
     pacienteID: 'user1',
     especialistaID: 'specialist1',
-    fechaHora: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // Yesterday
+    fechaHora: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), 
     enlaceVideollamada: 'https://meet.example.com/ruralhealthhub-session1',
     notasConsulta: 'El paciente reporta síntomas leves de resfriado. Se recomienda reposo e hidratación.',
     estado: 'finalizada',
@@ -148,8 +169,8 @@ export const mockActiveTreatments: ActiveTreatment[] = [
     id: 'treat1',
     name: 'Tratamiento para Hipertensión',
     description: 'Medicación diaria para controlar la presión arterial.',
-    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days ago
-    prescribingDoctor: 'Dr. Ana García',
+    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), 
+    prescribingDoctor: 'Dr. Ana García Pérez',
     dosage: '1 pastilla (10mg)',
     frequency: 'Cada 24 horas',
   },
@@ -157,8 +178,8 @@ export const mockActiveTreatments: ActiveTreatment[] = [
     id: 'treat2',
     name: 'Suplemento Vitamínico',
     description: 'Complejo vitamínico para deficiencia leve.',
-    startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
-    prescribingDoctor: 'Dr. Carlos López',
+    startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), 
+    prescribingDoctor: 'Dr. Carlos López Mendoza',
     dosage: '1 cápsula',
     frequency: 'Con el desayuno',
   }
@@ -171,7 +192,7 @@ export const mockMedicalHistory: MedicalRecord[] = [
     date: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
     title: 'Hipertensión Arterial Leve',
     summary: 'Paciente diagnosticado con hipertensión arterial leve, se inicia tratamiento y seguimiento.',
-    doctorName: 'Dr. Ana García',
+    doctorName: 'Dr. Ana García Pérez',
   },
   {
     id: 'hist2',
@@ -179,7 +200,7 @@ export const mockMedicalHistory: MedicalRecord[] = [
     date: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
     title: 'Lisinopril 10mg',
     summary: 'Prescripción de Lisinopril 10mg, 1 comprimido al día.',
-    doctorName: 'Dr. Ana García',
+    doctorName: 'Dr. Ana García Pérez',
     details: { medicamento: 'Lisinopril', dosis: '10mg', frecuencia: '1 vez al día' }
   },
   {
@@ -188,7 +209,7 @@ export const mockMedicalHistory: MedicalRecord[] = [
     date: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
     title: 'Perfil Lipídico',
     summary: 'Colesterol total: 190 mg/dL, LDL: 110 mg/dL, HDL: 50 mg/dL. Dentro de rangos aceptables.',
-    doctorName: 'Laboratorio Central',
+    doctorName: 'Laboratorio Hospital Unanue',
     documentUrl: 'https://placehold.co/200x300.png?text=LabResults', 
     dataAiHint: 'lab results document' 
   },
@@ -198,7 +219,7 @@ export const mockMedicalHistory: MedicalRecord[] = [
     date: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString(),
     title: 'Vacuna Antigripal 2023',
     summary: 'Administración de vacuna contra la influenza estacional.',
-    doctorName: 'Enfermería Hospital Central',
+    doctorName: 'Enfermería EsSalud Tacna',
   },
   {
     id: 'hist5',
@@ -206,8 +227,6 @@ export const mockMedicalHistory: MedicalRecord[] = [
     date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
     title: 'Seguimiento de resfriado común',
     summary: 'Paciente refiere mejoría de síntomas de resfriado. Continúa con reposo e hidratación.',
-    doctorName: 'Dr. Ana García (Telemedicina)',
+    doctorName: 'Dr. Ana García Pérez (Telemedicina)',
   }
 ];
-
-    
