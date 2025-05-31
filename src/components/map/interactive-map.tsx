@@ -73,3 +73,4 @@ InteractiveMapComponent.displayName = 'InteractiveMap'; // Optional: for better 
 
 // Export the memoized component
 export { InteractiveMapComponent as InteractiveMap };
+
