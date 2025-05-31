@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react'; // Added useState, useEffect
+import React from 'react';
 import type { Hospital } from '@/types';
 import L from 'leaflet';
 import Link from 'next/link';
@@ -21,72 +21,50 @@ const defaultIcon = new L.Icon({
 
 interface InteractiveMapProps {
   hospitals: Hospital[];
-  className?: string; // For styling the wrapper div (e.g., rounded corners, shadow)
+  className?: string; 
 }
 
 const TACNA_COORDS: L.LatLngExpression = [-18.0146, -70.2534];
 const DEFAULT_ZOOM = 13;
 
 // This is the component that will be dynamically imported by the page
-const InteractiveMapComponent = React.memo(function InteractiveMap({ hospitals, className }: InteractiveMapProps) {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []); // Empty dependency array ensures this runs only once on mount
-
-  if (!isMounted) {
-    // This placeholder will be shown while waiting for the client-side mount.
-    // The parent page also has a loading state for the dynamic import of this component.
-    return (
-      <div 
-        className={className} 
-        style={{ height: '400px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f0f0' }}
-      >
-        <p>Initializing map...</p>
-      </div>
-    );
-  }
-
+const InteractiveMapComponent = ({ hospitals, className }: InteractiveMapProps) => {
   return (
-    // This wrapper div gets the className for styling (e.g. rounded, shadow)
-    // and explicitly sets the dimensions for the map area.
-    <div className={className} style={{ height: '400px', width: '100%' }}>
-      <MapContainer
-          id="hospitals-map-leaflet-container" // Static ID for the map container
-          center={TACNA_COORDS}
-          zoom={DEFAULT_ZOOM}
-          scrollWheelZoom={true}
-          style={{ height: '100%', width: '100%' }} // MapContainer fills the wrapper
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {hospitals.map((hospital) => {
-          const position: L.LatLngExpression = hospital.geolocalizacion
-            ? [hospital.geolocalizacion.lat, hospital.geolocalizacion.lng]
-            : TACNA_COORDS; // Fallback, though ideally all hospitals have coords
+    <MapContainer
+        // The className for rounded corners, shadow, etc., and style for explicit height
+        // are applied directly to MapContainer.
+        className={className} 
+        style={{ height: '400px', width: '100%' }} 
+        center={TACNA_COORDS}
+        zoom={DEFAULT_ZOOM}
+        scrollWheelZoom={true}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {hospitals.map((hospital) => {
+        const position: L.LatLngExpression = hospital.geolocalizacion
+          ? [hospital.geolocalizacion.lat, hospital.geolocalizacion.lng]
+          : TACNA_COORDS; 
 
-          return (
-            <Marker key={hospital.id} position={position} icon={defaultIcon}>
-              <Popup>
-                <div className="space-y-1">
-                  <h3 className="font-semibold text-base">{hospital.nombre}</h3>
-                  <p className="text-xs text-muted-foreground">{hospital.direccion}</p>
-                  <Button asChild variant="link" size="sm" className="p-0 h-auto text-xs">
-                    <Link href={`/hospitals/${hospital.id}`}>View Details</Link>
-                  </Button>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MapContainer>
-    </div>
+        return (
+          <Marker key={hospital.id} position={position} icon={defaultIcon}>
+            <Popup>
+              <div className="space-y-1">
+                <h3 className="font-semibold text-base">{hospital.nombre}</h3>
+                <p className="text-xs text-muted-foreground">{hospital.direccion}</p>
+                <Button asChild variant="link" size="sm" className="p-0 h-auto text-xs">
+                  <Link href={`/hospitals/${hospital.id}`}>View Details</Link>
+                </Button>
+              </div>
+            </Popup>
+          </Marker>
+        );
+      })}
+    </MapContainer>
   );
-});
+};
 
 InteractiveMapComponent.displayName = 'InteractiveMap';
-
 export { InteractiveMapComponent as InteractiveMap };

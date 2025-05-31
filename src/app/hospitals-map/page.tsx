@@ -11,12 +11,22 @@ import { Hospital as HospitalIcon, MapPin, Building2, Info } from "lucide-react"
 import Link from "next/link";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import dynamic from 'next/dynamic'; // Import dynamic
+import dynamic from 'next/dynamic'; 
 
 // Dynamically import the InteractiveMap component
 const InteractiveMap = dynamic(() => 
   import('@/components/map/interactive-map').then(mod => mod.InteractiveMap),
-  { ssr: false, loading: () => <div style={{ height: '400px', background: '#f0f0f0' }} className="flex items-center justify-center rounded-lg shadow-md mx-auto"><p>Loading map...</p></div> }
+  { 
+    ssr: false, 
+    loading: () => (
+      <div 
+        className="rounded-lg shadow-md mx-auto bg-muted" // Apply similar classes as the map itself
+        style={{ height: '400px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <p className="text-muted-foreground">Loading map...</p>
+      </div>
+    ) 
+  }
 );
 
 
@@ -47,6 +57,7 @@ export default function HospitalsMapPage() {
           <CardDescription>Interactive map showing hospital locations.</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* The className here provides styling like rounded corners and shadow to the map area */}
           <InteractiveMap hospitals={mockHospitals} className="rounded-lg shadow-md mx-auto" />
         </CardContent>
       </Card>
