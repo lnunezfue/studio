@@ -1,12 +1,13 @@
 
 "use client";
 
+import React from 'react'; // Import React for React.memo
 import type { Hospital } from '@/types';
-import dynamic from 'next/dynamic'; // Import dynamic for react-leaflet components
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet'; // Import L for custom icons
+import L from 'leaflet';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 // Fix for default Leaflet marker icon issue
 // For more details, see: https://github.com/PaulLeCam/react-leaflet/issues/808
@@ -20,36 +21,26 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-// Dynamically import react-leaflet components
-const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { 
-  ssr: false,
-  loading: () => <div style={{ height: '400px', backgroundColor: '#e0e0e0' }} className="flex items-center justify-center rounded-lg"><p>Loading Map...</p></div>
-});
-const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
-const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
-const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
-
-
 interface InteractiveMapProps {
   hospitals: Hospital[];
   className?: string;
 }
 
-// Approximate coordinates for Tacna, Peru
 const TACNA_COORDS: L.LatLngExpression = [-18.0146, -70.2534];
 const DEFAULT_ZOOM = 13;
 
-export function InteractiveMap({ hospitals, className }: InteractiveMapProps) {
-  // The MapContainer is dynamically imported with ssr: false, 
-  // so it will only render on the client. The explicit typeof window === 'undefined' 
-  // check was likely redundant and could interfere.
+// Define mapStyle outside the component or use useMemo for stability
+const mapStyle: React.CSSProperties = { height: '400px', width: '100%' };
+
+// Wrap the functional component with React.memo
+const InteractiveMapComponent = React.memo(function InteractiveMap({ hospitals, className }: InteractiveMapProps) {
   return (
     <MapContainer 
         center={TACNA_COORDS} 
         zoom={DEFAULT_ZOOM} 
         scrollWheelZoom={true} 
         className={className} 
-        style={{ height: '400px', width: '100%' }}
+        style={mapStyle} // Use the stable style object
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -76,4 +67,9 @@ export function InteractiveMap({ hospitals, className }: InteractiveMapProps) {
       })}
     </MapContainer>
   );
-}
+});
+
+InteractiveMapComponent.displayName = 'InteractiveMap'; // Optional: for better debugging names
+
+// Export the memoized component
+export { InteractiveMapComponent as InteractiveMap };
