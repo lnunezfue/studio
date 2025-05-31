@@ -136,7 +136,7 @@ function HospitalCard({ hospital }: { hospital: Hospital }) {
     <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
       <CardHeader className="p-0 relative">
         <Image 
-          src={hospital.imagenUrl || "https://placehold.co/600x400.png"} 
+          src={hospital.imagenUrl || "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxob3NwaXRhbHxlbnwwfHx8fDE3NDg3MzA2MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080"} 
           alt={hospital.nombre} 
           width={600} 
           height={400} 
@@ -223,3 +223,4 @@ function SpecialistCard({ specialist }: { specialist: Specialist }) {
     </Card>
   );
 }
+
