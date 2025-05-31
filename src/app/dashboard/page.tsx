@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { mockAppointments, mockUser, mockActiveTreatments } from "@/lib/mock-data";
-import { ArrowRight, Bot, CalendarCheck, ListChecks, Video, Activity, FileText, Pill } from "lucide-react";
+import { ArrowRight, Bot, CalendarCheck, ListChecks, Video, Activity, FileText, Pill, BriefcaseMedical } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
@@ -118,18 +118,18 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <QuickActionCard
+              title="Book New Appointment"
+              description="Find a specialist and schedule your visit."
+              href="/directory" 
+              icon={<BriefcaseMedical className="h-8 w-8 text-primary" />}
+            />
             <QuickActionCard
               title="Find Hospitals & Specialists"
               description="Explore our directory of healthcare providers."
               href="/directory"
               icon={<ListChecks className="h-8 w-8 text-primary" />}
-            />
-            <QuickActionCard
-              title="Book New Appointment"
-              description="Schedule your next visit with a specialist."
-              href="/directory" 
-              icon={<CalendarCheck className="h-8 w-8 text-primary" />}
             />
             <QuickActionCard
               title="View Medical History"
@@ -143,11 +143,11 @@ export default function DashboardPage() {
                 href="/telemedicine"
                 icon={<Video className="h-8 w-8 text-primary" />}
             />
-             <div className="relative group overflow-hidden rounded-lg col-span-1 sm:col-span-2 lg:col-span-1">
+             <div className="relative group overflow-hidden rounded-lg col-span-1 sm:col-span-2 lg:col-span-3 xl:col-span-4">
               <Image 
-                src="https://placehold.co/400x250.png" 
+                src="https://placehold.co/800x250.png" 
                 alt="Health awareness" 
-                width={400} 
+                width={800} 
                 height={250} 
                 className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                 data-ai-hint="health wellness" 

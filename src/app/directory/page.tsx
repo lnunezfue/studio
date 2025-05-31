@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockHospitals, mockSpecialists } from "@/lib/mock-data";
 import type { Hospital, Specialist } from "@/types";
-import { Hospital as HospitalIcon, Search, Stethoscope, MapPin, ListChecks, ShieldCheck, Package } from "lucide-react";
+import { Hospital as HospitalIcon, Search, Stethoscope, MapPin, ListChecks, ShieldCheck, Package, Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useMemo } from "react";
@@ -47,6 +47,11 @@ export default function DirectoryPage() {
       <PageHeader 
         title="Hospital & Specialist Directory"
         description="Find healthcare providers and facilities near you."
+        actions={
+          <Button asChild variant="outline">
+            <Link href="/hospitals-map"><Map className="w-4 h-4 mr-2" />View Map Overview</Link>
+          </Button>
+        }
       />
       
       <div className="mb-6 p-4 border rounded-lg bg-card shadow">
@@ -138,7 +143,7 @@ function HospitalCard({ hospital }: { hospital: Hospital }) {
           className="w-full h-48 object-cover"
           data-ai-hint="hospital building"
         />
-        <Badge variant="secondary" className="absolute top-2 right-2">{hospital.tipo || 'N/A'}</Badge>
+        {hospital.tipo && <Badge variant="secondary" className="absolute top-2 right-2">{hospital.tipo}</Badge>}
       </CardHeader>
       <CardContent className="p-4 flex-grow">
         <CardTitle className="text-lg font-headline mb-1">{hospital.nombre}</CardTitle>
@@ -176,7 +181,9 @@ function HospitalCard({ hospital }: { hospital: Hospital }) {
 
       </CardContent>
       <CardFooter className="p-4 border-t">
-        <Button variant="outline" size="sm" className="w-full" disabled>View Details</Button>
+        <Button asChild variant="outline" size="sm" className="w-full">
+          <Link href={`/hospitals/${hospital.id}`}>View Details</Link>
+        </Button>
       </CardFooter>
     </Card>
   );
