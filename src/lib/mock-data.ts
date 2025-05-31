@@ -1,5 +1,5 @@
 
-import type { Hospital, Specialist, Appointment, TelemedicineSession, User, ActiveTreatment, MedicalRecord } from '@/types';
+import type { Hospital, Specialist, Appointment, TelemedicineSession, User, ActiveTreatment, MedicalRecord, Vaccine, NotificationMessage } from '@/types';
 
 // Helper function to generate future ISO date-time strings
 const getFutureSlot = (daysInFuture: number, hour: number, minute: number = 0): string => {
@@ -24,7 +24,7 @@ export const mockHospitals: Hospital[] = [
     id: 'hosp-unanue-tacna',
     nombre: 'Hospital Hipólito Unanue de Tacna',
     direccion: 'Av. Hipólito Unanue 1350, Tacna 23002, Perú',
-    geolocalizacion: { lat: -18.0038, lng: -70.2442 }, // Coordenadas aproximadas
+    geolocalizacion: { lat: -18.0038, lng: -70.2442 },
     tipo: 'Hospital Regional',
     estadoConsultorios: [
         { consultorioId: 'c101', ocupado: false }, 
@@ -39,7 +39,7 @@ export const mockHospitals: Hospital[] = [
     id: 'hosp-essalud-tacna',
     nombre: 'Hospital III Daniel Alcides Carrión - EsSalud Tacna',
     direccion: 'Prolongación Pizarro S/N, Tacna 23001, Perú',
-    geolocalizacion: { lat: -18.0095, lng: -70.2490 }, // Coordenadas aproximadas
+    geolocalizacion: { lat: -18.0095, lng: -70.2490 },
     tipo: 'Hospital de EsSalud',
     estadoConsultorios: [
         { consultorioId: 'e201', ocupado: true }, 
@@ -53,7 +53,7 @@ export const mockHospitals: Hospital[] = [
     id: 'clin-promedic-tacna',
     nombre: 'Clínica Promedic Tacna',
     direccion: 'Av. Bolognesi 1002, Tacna 23001, Perú',
-    geolocalizacion: { lat: -18.0103, lng: -70.2521 }, // Coordenadas aproximadas
+    geolocalizacion: { lat: -18.0103, lng: -70.2521 },
     tipo: 'Clínica Privada',
     estadoConsultorios: [
         { consultorioId: 'p301', ocupado: false },
@@ -70,16 +70,11 @@ export const mockSpecialists: Specialist[] = [
     id: 'specialist1',
     nombre: 'Dr. Ana García Pérez',
     especialidad: 'Medicina General',
-    hospitalID: 'hosp-unanue-tacna', // Actualizado
+    hospitalID: 'hosp-unanue-tacna',
     horariosDisponibles: [
-      getFutureSlot(1, 9, 0),
-      getFutureSlot(1, 10, 0),
-      getFutureSlot(1, 11, 30),
-      getFutureSlot(2, 14, 0),
-      getFutureSlot(2, 15, 0),
-      getFutureSlot(3, 9, 0),
-      getFutureSlot(3, 10, 30),
-      getFutureSlot(4, 16, 0),
+      getFutureSlot(1, 9, 0), getFutureSlot(1, 10, 0), getFutureSlot(1, 11, 30),
+      getFutureSlot(2, 14, 0), getFutureSlot(2, 15, 0), getFutureSlot(3, 9, 0),
+      getFutureSlot(3, 10, 30), getFutureSlot(4, 16, 0),
     ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Médica general con 5 años de experiencia en atención primaria en Tacna.',
@@ -88,14 +83,10 @@ export const mockSpecialists: Specialist[] = [
     id: 'specialist2',
     nombre: 'Dr. Carlos López Mendoza',
     especialidad: 'Pediatría',
-    hospitalID: 'hosp-essalud-tacna', // Actualizado
+    hospitalID: 'hosp-essalud-tacna',
     horariosDisponibles: [
-      getFutureSlot(1, 11, 0),
-      getFutureSlot(1, 12, 0),
-      getFutureSlot(2, 9, 0),
-      getFutureSlot(2, 10, 0),
-      getFutureSlot(3, 14, 30),
-      getFutureSlot(4, 10, 0),
+      getFutureSlot(1, 11, 0), getFutureSlot(1, 12, 0), getFutureSlot(2, 9, 0),
+      getFutureSlot(2, 10, 0), getFutureSlot(3, 14, 30), getFutureSlot(4, 10, 0),
     ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Pediatra dedicado al cuidado de la salud infantil en EsSalud.',
@@ -104,14 +95,10 @@ export const mockSpecialists: Specialist[] = [
     id: 'specialist3',
     nombre: 'Dra. Laura Torres Quispe',
     especialidad: 'Ginecología',
-    hospitalID: 'clin-promedic-tacna', // Actualizado
+    hospitalID: 'clin-promedic-tacna',
     horariosDisponibles: [
-      getFutureSlot(1, 15, 0),
-      getFutureSlot(1, 16, 0),
-      getFutureSlot(2, 10, 30),
-      getFutureSlot(2, 11, 30),
-      getFutureSlot(3, 16, 0),
-      getFutureSlot(4, 11, 0),
+      getFutureSlot(1, 15, 0), getFutureSlot(1, 16, 0), getFutureSlot(2, 10, 30),
+      getFutureSlot(2, 11, 30), getFutureSlot(3, 16, 0), getFutureSlot(4, 11, 0),
     ],
     fotoPerfilUrl: 'https://placehold.co/100x100.png',
     descripcion: 'Especialista en salud femenina y obstetricia en Clínica Promedic.',
@@ -123,7 +110,7 @@ export const mockAppointments: Appointment[] = [
     id: 'apt1',
     pacienteID: 'user1',
     especialistaID: 'specialist1',
-    hospitalID: 'hosp-unanue-tacna', // Actualizado
+    hospitalID: 'hosp-unanue-tacna',
     fechaHora: getFutureSlot(2, 10, 0), 
     estado: 'programada',
     recordatorioActivado: true,
@@ -133,7 +120,7 @@ export const mockAppointments: Appointment[] = [
     id: 'apt2',
     pacienteID: 'user1',
     especialistaID: 'specialist2',
-    hospitalID: 'hosp-essalud-tacna', // Actualizado
+    hospitalID: 'hosp-essalud-tacna',
     fechaHora: getFutureSlot(5, 11, 0),
     estado: 'programada',
     recordatorioActivado: false,
@@ -143,7 +130,7 @@ export const mockAppointments: Appointment[] = [
     id: 'apt3',
     pacienteID: 'user1',
     especialistaID: 'specialist3',
-    hospitalID: 'clin-promedic-tacna', // Actualizado
+    hospitalID: 'clin-promedic-tacna',
     fechaHora: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), 
     estado: 'completada',
     recordatorioActivado: false,
@@ -211,7 +198,6 @@ export const mockMedicalHistory: MedicalRecord[] = [
     summary: 'Colesterol total: 190 mg/dL, LDL: 110 mg/dL, HDL: 50 mg/dL. Dentro de rangos aceptables.',
     doctorName: 'Laboratorio Hospital Unanue',
     documentUrl: 'https://placehold.co/200x300.png?text=LabResults', 
-    dataAiHint: 'lab results document' 
   },
   {
     id: 'hist4',
@@ -228,5 +214,90 @@ export const mockMedicalHistory: MedicalRecord[] = [
     title: 'Seguimiento de resfriado común',
     summary: 'Paciente refiere mejoría de síntomas de resfriado. Continúa con reposo e hidratación.',
     doctorName: 'Dr. Ana García Pérez (Telemedicina)',
+  }
+];
+
+export const mockVaccines: Vaccine[] = [
+  {
+    id: 'vac-flu-2024',
+    nombre: 'Vacuna Antigripal Estacional 2024',
+    descripcion: 'Protección contra las cepas de influenza más comunes para la temporada actual.',
+    stockDisponible: 50,
+    hospitalID: 'hosp-unanue-tacna',
+    listaEspera: [],
+    minAge: 0.5, // 6 meses
+    dosesRequired: 1,
+    provider: 'MINSA',
+    imageUrl: 'https://placehold.co/600x400.png',
+  },
+  {
+    id: 'vac-covid-bivalente',
+    nombre: 'Vacuna COVID-19 Bivalente Refuerzo',
+    descripcion: 'Refuerzo actualizado para protección contra variantes de COVID-19.',
+    stockDisponible: 0,
+    hospitalID: 'hosp-essalud-tacna',
+    listaEspera: ['user1'], // mockUser is on this waitlist
+    minAge: 12,
+    dosesRequired: 1,
+    provider: 'EsSalud / Pfizer',
+    imageUrl: 'https://placehold.co/600x400.png',
+  },
+  {
+    id: 'vac-vph',
+    nombre: 'Vacuna VPH (Virus del Papiloma Humano)',
+    descripcion: 'Prevención contra tipos de VPH que pueden causar cáncer.',
+    stockDisponible: 20,
+    hospitalID: 'clin-promedic-tacna',
+    listaEspera: [],
+    minAge: 9,
+    maxAge: 26,
+    dosesRequired: 2, // o 3 según edad
+    provider: 'Clínica Privada / Gardasil 9',
+    imageUrl: 'https://placehold.co/600x400.png',
+  },
+  {
+    id: 'vac-neumococo',
+    nombre: 'Vacuna Neumococo Polisacárida',
+    descripcion: 'Protección contra infecciones por neumococo para adultos mayores o con condiciones de riesgo.',
+    stockDisponible: 0,
+    hospitalID: 'hosp-unanue-tacna',
+    listaEspera: [],
+    minAge: 65,
+    dosesRequired: 1,
+    provider: 'MINSA',
+    imageUrl: 'https://placehold.co/600x400.png',
+  }
+];
+
+export let mockNotifications: NotificationMessage[] = [
+  {
+    id: 'notif1',
+    userID: 'user1',
+    title: 'Recordatorio de Cita',
+    mensaje: 'Tu cita con Dr. Ana García Pérez es mañana a las 10:00 AM.',
+    tipo: 'cita',
+    fechaEnvio: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    leida: false,
+    detailsUrl: '/appointments'
+  },
+  {
+    id: 'notif2',
+    userID: 'user1',
+    title: 'Vacuna COVID-19 Disponible',
+    mensaje: '¡Buenas noticias! La vacuna COVID-19 Bivalente por la que estabas en lista de espera ya está disponible en Hospital EsSalud Tacna. Agenda tu dosis.',
+    tipo: 'vacuna',
+    fechaEnvio: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    leida: true,
+    detailsUrl: '/vaccines#vac-covid-bivalente'
+  },
+  {
+    id: 'notif3',
+    userID: 'user1',
+    title: 'Resultados de Laboratorio Listos',
+    mensaje: 'Tus resultados del perfil lipídico están listos para ser vistos.',
+    tipo: 'general',
+    fechaEnvio: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    leida: false,
+    detailsUrl: '/medical-history'
   }
 ];

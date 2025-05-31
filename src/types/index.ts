@@ -44,12 +44,18 @@ export interface Appointment {
 }
 
 export interface Vaccine {
-  id:string;
+  id: string;
   nombre: string;
+  descripcion: string;
   stockDisponible: number;
   hospitalID: string; // fk to Hospital
   cantidadMinima?: number;
-  listaEspera?: string[]; // array of pacienteID
+  listaEspera: string[]; // array of pacienteID
+  minAge?: number; 
+  maxAge?: number; 
+  dosesRequired?: number;
+  provider?: string; // e.g., Pfizer, Moderna
+  imageUrl?: string; 
 }
 
 export interface MedicalSupply {
@@ -73,10 +79,12 @@ export interface TelemedicineSession {
 export interface NotificationMessage {
   id: string;
   userID: string; // fk to User
+  title: string;
   mensaje: string;
   tipo: 'cita' | 'vacuna' | 'insumo' | 'general';
   fechaEnvio: string; // ISO string
   leida: boolean;
+  detailsUrl?: string; 
 }
 
 export interface AffluenceData {
@@ -112,3 +120,4 @@ export interface MedicalRecord {
   documentUrl?: string; // Optional link to a mock document/image
   details?: Record<string, any>; // For specific fields like lab values
 }
+

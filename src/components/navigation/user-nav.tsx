@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,12 +13,49 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/auth-context";
-import { LogOut, Settings, UserCircle, LifeBuoy, Bell } from "lucide-react";
+import { LogOut, Settings, UserCircle, LifeBuoy, Bell, Calendar, Syringe, Info } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
+import { mockNotifications } from "@/lib/mock-data"; // Import mock notifications
+import type { NotificationMessage } from "@/types";
+import { format, parseISO } from 'date-fns';
+import React, { useMemo, useEffect, useState } from "react";
+
+const notificationIcons: Record<NotificationMessage["tipo"], React.ElementType> = {
+  cita: Calendar,
+  vacuna: Syringe,
+  insumo: Info, 
+  general: Info,
+};
 
 export function UserNav() {
   const { user, logout } = useAuth();
+  // Local state to trigger re-render when mockNotifications changes
+  const [notifications, setNotifications] = useState<NotificationMessage[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      // Filter and sort notifications for the current user
+      // This effect will re-run if mockNotifications reference changes or user changes
+      // For mock data, we might need a way to "refresh" this if mockNotifications is mutated elsewhere.
+      // A simple solution for now is to re-filter from the global mockNotifications.
+      const userNotifications = mockNotifications
+        .filter(n => n.userID === user.id)
+        .sort((a, b) => parseISO(b.fechaEnvio).getTime() - parseISO(a.fechaEnvio).getTime());
+      setNotifications(userNotifications);
+    }
+  }, [user, mockNotifications.length]); // Depend on mockNotifications.length to crudely detect changes
+
+  const unreadNotificationCount = useMemo(() => {
+    if (!user) return 0;
+    return notifications.filter(n => !n.leida).length;
+  }, [notifications, user]);
+  
+  const recentUnreadNotifications = useMemo(() => {
+    if (!user) return [];
+    return notifications.filter(n => !n.leida).slice(0, 3);
+  }, [notifications, user]);
+
 
   if (!user) {
     return null;
@@ -31,18 +69,15 @@ export function UserNav() {
     return names[0].substring(0, 2);
   };
   
-  // Mock notification count
-  const notificationCount = 3;
-
   return (
     <div className="flex items-center gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
              <Bell className="h-5 w-5" />
-             {notificationCount > 0 && (
+             {unreadNotificationCount > 0 && (
                 <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs">
-                  {notificationCount}
+                  {unreadNotificationCount}
                 </Badge>
              )}
           </Button>
@@ -52,24 +87,30 @@ export function UserNav() {
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">Notifications</p>
               <p className="text-xs leading-none text-muted-foreground">
-                You have {notificationCount} unread messages.
+                You have {unreadNotificationCount} unread notifications.
               </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {/* Mock notifications */}
-          <DropdownMenuItem className="flex flex-col items-start">
-            <p className="font-semibold">Appointment Reminder</p>
-            <p className="text-xs text-muted-foreground">Your appointment with Dr. Ana is tomorrow.</p>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex flex-col items-start">
-            <p className="font-semibold">Vaccine Available</p>
-            <p className="text-xs text-muted-foreground">Flu vaccine now available at Hospital Central.</p>
-          </DropdownMenuItem>
-           <DropdownMenuItem className="flex flex-col items-start">
-            <p className="font-semibold">New Message</p>
-            <p className="text-xs text-muted-foreground">Dr. López sent you a message.</p>
-          </DropdownMenuItem>
+          {recentUnreadNotifications.length > 0 ? (
+            recentUnreadNotifications.map(notification => {
+              const Icon = notificationIcons[notification.tipo] || Info;
+              return (
+                <DropdownMenuItem key={notification.id} asChild className="cursor-pointer">
+                  <Link href={notification.detailsUrl || '/notifications'} className="flex flex-col items-start w-full">
+                    <div className="flex items-center gap-2 w-full">
+                      <Icon className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <p className="font-semibold truncate flex-grow">{notification.title}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground ml-6 truncate w-[calc(100%-1.5rem)]">{notification.mensaje}</p>
+                    <p className="text-xs text-muted-foreground/70 ml-6 mt-0.5">{format(parseISO(notification.fechaEnvio), "MMM d, h:mm a")}</p>
+                  </Link>
+                </DropdownMenuItem>
+              )
+            })
+          ) : (
+            <DropdownMenuItem disabled className="text-center text-muted-foreground">No unread notifications.</DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/notifications" className="w-full justify-center">View all notifications</Link>

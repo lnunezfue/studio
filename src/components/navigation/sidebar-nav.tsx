@@ -15,7 +15,9 @@ import {
   Bot,
   Video,
   UserCircle,
-  FileText, // Added for Medical History
+  FileText,
+  Syringe, // Added for Vaccines
+  Bell, // Added for Notifications
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -23,9 +25,11 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/directory', label: 'Directory', icon: ListChecks },
   { href: '/appointments', label: 'My Appointments', icon: CalendarCheck },
-  { href: '/medical-history', label: 'Medical History', icon: FileText }, // New item
+  { href: '/medical-history', label: 'Medical History', icon: FileText },
+  { href: '/vaccines', label: 'Vaccines', icon: Syringe }, // New item
   { href: '/ai-guidance', label: 'AI Guidance', icon: Bot },
   { href: '/telemedicine', label: 'Telemedicine', icon: Video },
+  { href: '/notifications', label: 'Notifications', icon: Bell }, // New item
   { href: '/profile', label: 'Profile', icon: UserCircle },
 ];
 
