@@ -8,10 +8,17 @@ import { Badge } from "@/components/ui/badge";
 import { mockHospitals } from "@/lib/mock-data";
 import type { Hospital } from "@/types";
 import { Hospital as HospitalIcon, MapPin, Building2, Info } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Button } from "@/components/ui/button";
+import dynamic from 'next/dynamic'; // Import dynamic
+
+// Dynamically import the InteractiveMap component
+const InteractiveMap = dynamic(() => 
+  import('@/components/map/interactive-map').then(mod => mod.InteractiveMap),
+  { ssr: false, loading: () => <div style={{ height: '400px', background: '#f0f0f0' }} className="flex items-center justify-center rounded-lg shadow-md mx-auto"><p>Loading map...</p></div> }
+);
+
 
 export default function HospitalsMapPage() {
   const getConsultorioAvailability = (hospital: Hospital) => {
@@ -31,23 +38,16 @@ export default function HospitalsMapPage() {
     <MainLayout>
       <PageHeader 
         title="Hospital Map Overview (Tacna)"
-        description="Find hospital locations and basic availability. (Map is a placeholder)"
+        description="Find hospital locations and basic availability."
       />
 
       <Card className="shadow-xl mb-8">
         <CardHeader>
           <CardTitle className="font-headline">Tacna Area Map</CardTitle>
-          <CardDescription>This is a placeholder image. A real map would show hospital markers.</CardDescription>
+          <CardDescription>Interactive map showing hospital locations.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Image 
-            src="https://placehold.co/1200x600.png" 
-            alt="Map of Tacna showing hospitals" 
-            width={1200} 
-            height={600} 
-            className="rounded-lg shadow-md mx-auto object-cover"
-            data-ai-hint="Tacna Peru map"
-          />
+          <InteractiveMap hospitals={mockHospitals} className="rounded-lg shadow-md mx-auto" />
         </CardContent>
       </Card>
 
@@ -97,4 +97,3 @@ export default function HospitalsMapPage() {
     </MainLayout>
   );
 }
-

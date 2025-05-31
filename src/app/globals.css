@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Leaflet CSS */
+@import "leaflet/dist/leaflet.css";
+
 @layer base {
   :root {
     --background: 210 29% 95%; /* Light Gray */
@@ -85,4 +88,25 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Leaflet popup customization to better fit ShadCN theme */
+.leaflet-popup-content-wrapper {
+  @apply rounded-md border bg-popover text-popover-foreground shadow-md;
+  padding: 1px; /* Leaflet adds its own padding inside .leaflet-popup-content */
+}
+.leaflet-popup-content {
+  @apply text-sm p-2;
+  margin: 8px 10px; /* Adjust default leaflet margins */
+}
+.leaflet-popup-tip-container {
+  width: 40px;
+  height: 20px;
+}
+.leaflet-popup-tip {
+  @apply bg-popover border-transparent shadow-none;
+}
+.leaflet-container a.leaflet-popup-close-button {
+  @apply text-popover-foreground/70 hover:text-popover-foreground;
+  padding: 6px 6px 0 0;
 }
