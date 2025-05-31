@@ -13,22 +13,21 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import dynamic from 'next/dynamic'; 
 
-// Dynamically import the InteractiveMap component
-const InteractiveMap = dynamic(() => 
-  import('@/components/map/interactive-map').then(mod => mod.InteractiveMap),
+// Dynamically import the InteractiveMap component to ensure it's client-side only
+const DynamicInteractiveMap = dynamic(
+  () => import('@/components/map/interactive-map').then(mod => mod.InteractiveMap),
   { 
-    ssr: false, 
+    ssr: false,
     loading: () => (
       <div 
-        className="rounded-lg shadow-md mx-auto bg-muted" // Apply similar classes as the map itself
-        style={{ height: '400px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        className="h-[400px] md:h-[500px] w-full bg-muted rounded-b-lg flex items-center justify-center"
+        // Style the loading placeholder to match map dimensions to avoid layout shift
       >
         <p className="text-muted-foreground">Loading map...</p>
       </div>
-    ) 
+    )
   }
 );
-
 
 export default function HospitalsMapPage() {
   const getConsultorioAvailability = (hospital: Hospital) => {
@@ -53,12 +52,12 @@ export default function HospitalsMapPage() {
 
       <Card className="shadow-xl mb-8">
         <CardHeader>
-          <CardTitle className="font-headline">Tacna Area Map</CardTitle>
-          <CardDescription>Interactive map showing hospital locations.</CardDescription>
+          <CardTitle className="font-headline">Mapa del Área de Tacna</CardTitle>
+          <CardDescription>Añade un mapa interactivo en este apartado utilizando la libreria leaflet , mostrando las ubicaciones de los centros medicos.</CardDescription>
         </CardHeader>
-        <CardContent>
-          {/* The className here provides styling like rounded corners and shadow to the map area */}
-          <InteractiveMap hospitals={mockHospitals} className="rounded-lg shadow-md mx-auto" />
+        <CardContent className="p-0">
+          {/* className on DynamicInteractiveMap is for potential outer styling; height/width are managed inside or via style prop */}
+          <DynamicInteractiveMap hospitals={mockHospitals} className="h-[400px] md:h-[500px] w-full" />
         </CardContent>
       </Card>
 
