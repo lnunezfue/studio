@@ -217,7 +217,7 @@ export const mockMedicalHistory: MedicalRecord[] = [
   }
 ];
 
-const vaccineUnsplashUrl = "https://images.unsplash.com/photo-1674049406313-abb5511e0111?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxncmlwZXxlbnwwfHx8fDE3NDg3MzI0NzV8MA&ixlib=rb-4.1.0&q=80&w=1080";
+const vaccineUnsplashUrl = "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxDb3ZpZHxlbnwwfHx8fDE3NDg3MzI2MzF8MA&ixlib=rb-4.1.0&q=80&w=1080";
 
 export const mockVaccines: Vaccine[] = [
   {
